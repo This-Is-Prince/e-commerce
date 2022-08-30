@@ -1,0 +1,19 @@
+{
+  "name": "e-commerce",
+  "version": "1.0.0",
+  "main": "dist/app.js",
+  "scripts": {
+    "start": "node dist/app.js",
+    "dev": "nodemon dist/app.js",
+    "watch": "tsc -w"
+  },
+  "repository": "https://github.com/This-Is-Prince/e-commerce.git",
+  "author": "This-Is-Prince <this.is.kumar.prince@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^4.8.2"
+  },
+  "dependencies": {
+    "express": "^4.18.1"
+  }
+}
