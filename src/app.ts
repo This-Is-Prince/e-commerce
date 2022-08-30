@@ -11,6 +11,7 @@ import morgan from "morgan";
 import connectDB from "./db";
 import errorHandlerMiddleware from "./middleware/error-handler";
 import notFoundMiddleware from "./middleware/not-found";
+import authRouter from "./routes/auth.route";
 // app
 const app = express();
 // port
@@ -24,6 +25,8 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.send("e-commerce api");
 });
+
+app.use("/api/v1/auth", authRouter);
 
 // error middleware
 app.use(notFoundMiddleware);

@@ -22,6 +22,7 @@ const morgan_1 = __importDefault(require("morgan"));
 const db_1 = __importDefault(require("./db"));
 const error_handler_1 = __importDefault(require("./middleware/error-handler"));
 const not_found_1 = __importDefault(require("./middleware/not-found"));
+const auth_route_1 = __importDefault(require("./routes/auth.route"));
 // app
 const app = (0, express_1.default)();
 // port
@@ -33,6 +34,7 @@ app.use(express_1.default.json());
 app.get("/", (req, res) => {
     res.send("e-commerce api");
 });
+app.use("/api/v1/auth", auth_route_1.default);
 // error middleware
 app.use(not_found_1.default);
 app.use(error_handler_1.default);
