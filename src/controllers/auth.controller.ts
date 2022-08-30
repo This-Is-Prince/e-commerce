@@ -1,7 +1,18 @@
 import { RequestHandler } from "express";
+import User from "../models/User.model";
+import { StatusCodes } from "http-status-codes";
+import { BadRequestError } from "../errors";
 
 const register: RequestHandler = async (req, res) => {
-  res.send("register user");
+  const { email } = req.body;
+
+  const emailAlreadyExists = await User.findOne({ email });
+  if (emailAlreadyExists) {
+    throw new BadRequestError("Email already exists");
+  }
+
+  const user = await User.create(req.body);
+  res.status(StatusCodes.CREATED).json({ user });
 };
 
 const login: RequestHandler = async (req, res) => {
