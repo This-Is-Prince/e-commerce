@@ -22,6 +22,7 @@ const port = process.env.PORT || 3000;
 app.use(morgan("tiny"));
 app.use(express.json());
 app.use(cookieParser(process.env.JWT_SECRET));
+app.use(express.static(path.resolve(__dirname, "public")));
 
 // routes
 app.get("/", (req, res) => {

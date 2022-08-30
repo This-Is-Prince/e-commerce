@@ -6,7 +6,7 @@ interface IUser {
 }
 
 interface IUserDocument extends IUser, Document {
-  comparePassword: (password: string) => boolean;
+  comparePassword: (password: string) => Promise<boolean>;
 }
 
 export { IUser, IUserDocument };

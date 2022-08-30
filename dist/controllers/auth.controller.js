@@ -33,10 +33,29 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.register = register;
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.send("login user");
+    const { email, password } = req.body;
+    if (!email || !password) {
+        throw new errors_1.BadRequestError("Please provide email and password");
+    }
+    const user = yield User_model_1.default.findOne({ email });
+    if (!user) {
+        throw new errors_1.UnauthenticatedError("Please provide valid email");
+    }
+    const isPasswordCorrect = yield user.comparePassword(password);
+    if (!isPasswordCorrect) {
+        throw new errors_1.UnauthenticatedError("Please provide valid password");
+    }
+    const { _id, name, role } = user;
+    const tokenUser = { userId: _id, name, role };
+    (0, utils_1.attachCookiesToResponse)({ res, payload: tokenUser });
+    res.status(http_status_codes_1.StatusCodes.CREATED).json({ user: tokenUser });
 });
 exports.login = login;
 const logout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.send("logout user");
+    res.cookie("token", "", {
+        httpOnly: true,
+        expires: new Date(Date.now()),
+    });
+    res.status(http_status_codes_1.StatusCodes.OK).json({ msg: "user logged out!" });
 });
 exports.logout = logout;
