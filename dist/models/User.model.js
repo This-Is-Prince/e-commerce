@@ -12,6 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Role = void 0;
 const mongoose_1 = require("mongoose");
 const validator_1 = __importDefault(require("validator"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
@@ -19,7 +20,7 @@ var Role;
 (function (Role) {
     Role["Admin"] = "admin";
     Role["User"] = "user";
-})(Role || (Role = {}));
+})(Role = exports.Role || (exports.Role = {}));
 const UserSchema = new mongoose_1.Schema({
     name: {
         type: String,

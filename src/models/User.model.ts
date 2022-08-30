@@ -1,21 +1,11 @@
 import { model, Schema } from "mongoose";
 import validator from "validator";
 import bcrypt from "bcryptjs";
+import type { IUserDocument } from "../types/models/User.model";
 
-interface IUser {
-  name: string;
-  email: string;
-  password: string;
-  role: Role;
-}
-
-enum Role {
+export enum Role {
   Admin = "admin",
   User = "user",
-}
-
-interface IUserDocument extends IUser, Document {
-  comparePassword: (password: string) => boolean;
 }
 
 const UserSchema = new Schema<IUserDocument>({

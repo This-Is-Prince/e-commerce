@@ -23,6 +23,7 @@ const db_1 = __importDefault(require("./db"));
 const error_handler_1 = __importDefault(require("./middleware/error-handler"));
 const not_found_1 = __importDefault(require("./middleware/not-found"));
 const auth_route_1 = __importDefault(require("./routes/auth.route"));
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
 // app
 const app = (0, express_1.default)();
 // port
@@ -30,9 +31,16 @@ const port = process.env.PORT || 3000;
 // middleware
 app.use((0, morgan_1.default)("tiny"));
 app.use(express_1.default.json());
+app.use((0, cookie_parser_1.default)(process.env.JWT_SECRET));
 // routes
 app.get("/", (req, res) => {
+    console.log(req.cookies);
     res.send("e-commerce api");
+});
+app.get("/api/v1", (req, res) => {
+    console.log(req.cookies);
+    console.log(req.signedCookies);
+    res.send("api");
 });
 app.use("/api/v1/auth", auth_route_1.default);
 // error middleware

@@ -2,6 +2,7 @@ import { RequestHandler } from "express";
 import User from "../models/User.model";
 import { StatusCodes } from "http-status-codes";
 import { BadRequestError } from "../errors";
+import { attachCookiesToResponse } from "../utils";
 
 const register: RequestHandler = async (req, res) => {
   const { email, name, password } = req.body;
@@ -16,7 +17,11 @@ const register: RequestHandler = async (req, res) => {
   const role = isFirstAccount ? "admin" : "user";
 
   const user = await User.create({ email, name, password, role });
-  res.status(StatusCodes.CREATED).json({ user });
+
+  const tokenUser = { userId: user._id, name: user.name, role: user.role };
+  attachCookiesToResponse({ res, payload: tokenUser });
+  
+  res.status(StatusCodes.CREATED).json({ user: tokenUser });
 };
 
 const login: RequestHandler = async (req, res) => {

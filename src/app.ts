@@ -12,6 +12,7 @@ import connectDB from "./db";
 import errorHandlerMiddleware from "./middleware/error-handler";
 import notFoundMiddleware from "./middleware/not-found";
 import authRouter from "./routes/auth.route";
+import cookieParser from "cookie-parser";
 // app
 const app = express();
 // port
@@ -20,10 +21,17 @@ const port = process.env.PORT || 3000;
 // middleware
 app.use(morgan("tiny"));
 app.use(express.json());
+app.use(cookieParser(process.env.JWT_SECRET));
 
 // routes
 app.get("/", (req, res) => {
+  console.log(req.cookies);
   res.send("e-commerce api");
+});
+app.get("/api/v1", (req, res) => {
+  console.log(req.cookies);
+  console.log(req.signedCookies);
+  res.send("api");
 });
 
 app.use("/api/v1/auth", authRouter);
