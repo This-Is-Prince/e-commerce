@@ -1,7 +1,24 @@
 import { model, Schema } from "mongoose";
 import validator from "validator";
+import bcrypt from "bcryptjs";
 
-const UserSchema = new Schema({
+interface IUser {
+  name: string;
+  email: string;
+  password: string;
+  role: Role;
+}
+
+enum Role {
+  Admin = "admin",
+  User = "user",
+}
+
+interface IUserDocument extends IUser, Document {
+  comparePassword: (password: string) => boolean;
+}
+
+const UserSchema = new Schema<IUserDocument>({
   name: {
     type: String,
     required: [true, "Please provide name"],
@@ -24,11 +41,20 @@ const UserSchema = new Schema({
   },
   role: {
     type: String,
-    enum: ["admin", "user"],
-    default: "user",
+    enum: Role,
+    default: Role.User,
   },
 });
 
-const User = model("User", UserSchema);
+UserSchema.pre("save", async function () {
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+});
+
+UserSchema.methods.comparePassword = async function (password: string) {
+  return await bcrypt.compare(password, this.password);
+};
+
+const User = model<IUserDocument>("User", UserSchema);
 
 export default User;
