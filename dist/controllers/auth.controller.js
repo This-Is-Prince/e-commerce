@@ -17,12 +17,15 @@ const User_model_1 = __importDefault(require("../models/User.model"));
 const http_status_codes_1 = require("http-status-codes");
 const errors_1 = require("../errors");
 const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { email } = req.body;
+    const { email, name, password } = req.body;
     const emailAlreadyExists = yield User_model_1.default.findOne({ email });
     if (emailAlreadyExists) {
         throw new errors_1.BadRequestError("Email already exists");
     }
-    const user = yield User_model_1.default.create(req.body);
+    // first registered user is an admin
+    const isFirstAccount = (yield User_model_1.default.countDocuments({})) === 0;
+    const role = isFirstAccount ? "admin" : "user";
+    const user = yield User_model_1.default.create({ email, name, password, role });
     res.status(http_status_codes_1.StatusCodes.CREATED).json({ user });
 });
 exports.register = register;

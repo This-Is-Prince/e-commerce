@@ -4,14 +4,18 @@ import { StatusCodes } from "http-status-codes";
 import { BadRequestError } from "../errors";
 
 const register: RequestHandler = async (req, res) => {
-  const { email } = req.body;
+  const { email, name, password } = req.body;
 
   const emailAlreadyExists = await User.findOne({ email });
   if (emailAlreadyExists) {
     throw new BadRequestError("Email already exists");
   }
 
-  const user = await User.create(req.body);
+  // first registered user is an admin
+  const isFirstAccount = (await User.countDocuments({})) === 0;
+  const role = isFirstAccount ? "admin" : "user";
+
+  const user = await User.create({ email, name, password, role });
   res.status(StatusCodes.CREATED).json({ user });
 };
 
