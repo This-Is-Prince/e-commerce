@@ -1,6 +1,7 @@
 // async errors
 import "express-async-errors";
 import path from "path";
+import cors from 'cors'
 
 // dotenv config
 import { config } from "dotenv";
@@ -22,6 +23,7 @@ const port = process.env.PORT || 3000;
 app.use(morgan("tiny"));
 app.use(express.json());
 app.use(cookieParser(process.env.JWT_SECRET));
+app.use(cors())
 app.use(express.static(path.resolve(__dirname, "public")));
 
 // routes
