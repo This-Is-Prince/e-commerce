@@ -14,6 +14,7 @@ import errorHandlerMiddleware from "./middleware/error-handler";
 import notFoundMiddleware from "./middleware/not-found";
 import authRouter from "./routes/auth.route";
 import cookieParser from "cookie-parser";
+import userRouter from "./routes/user.route";
 // app
 const app = express();
 // port
@@ -38,6 +39,7 @@ app.get("/api/v1", (req, res) => {
 });
 
 app.use("/api/v1/auth", authRouter);
+app.use('/api/v1/users',userRouter);
 
 // error middleware
 app.use(notFoundMiddleware);
